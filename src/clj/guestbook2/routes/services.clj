@@ -2,7 +2,8 @@
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [guestbook2.db.core :as db]))
+            [guestbook2.db.core :as db]
+            [guestbook2.services.disc :as disc]))
 
 (defn insert-numbers [params]
   (do
@@ -11,12 +12,22 @@
     (ok 1)
   )
 
+(defrecord Disc [id type manufacturer])
+(s/defschema D {:id Long
+                :type String
+                :manufacturer String})
+(def disc1 [Disc 10 "foo" "bar"])
+
 (defapi service-routes
   {:swagger {:ui "/swagger-ui"
              :spec "/swagger.json"
              :data {:info {:version "1.0.0"
                            :title "Sample API"
                            :description "Sample Services"}}}}
+
+
+
+
 
   (context "/api" []
     :tags ["thingie"]
@@ -61,5 +72,15 @@
       :return       Long
       :query-params [val1 :- Long, val2 :- Long]
       :summary      "adds two values to db"
-      (insert-numbers {:val1 val1 :val2 val2})))
+      (insert-numbers {:val1 val1 :val2 val2}))
+
+
+
+
+      (GET "/discs" []
+          :return   D
+          :body     [disc1 D]
+          :summary  "echoes a Thingie from json-body"
+          (ok disc1)))
+    ;(GET "/discs" [] {:body [disc1 D]}))
 )

@@ -13,10 +13,12 @@
   )
 
 (defrecord Disc [id type manufacturer])
-(s/defschema D {:id Long
-                :type String
-                :manufacturer String})
-(def disc1 [Disc 10 "foo" "bar"])
+(def disc1 (Disc. 10 "putter" "Innova"))
+
+(defn toHash
+  [defRecord]
+    (hash-map :id (:id defRecord) :type (:type defRecord) :manufacturer (:manufacturer defRecord))
+  )
 
 (defapi service-routes
   {:swagger {:ui "/swagger-ui"
@@ -74,13 +76,7 @@
       :summary      "adds two values to db"
       (insert-numbers {:val1 val1 :val2 val2}))
 
-
-
-
-      (GET "/discs" []
-          :return   D
-          :body     [disc1 D]
-          :summary  "echoes a Thingie from json-body"
-          (ok disc1)))
-    ;(GET "/discs" [] {:body [disc1 D]}))
+    (GET "/discs" []
+      :summary  "echoes a Thingie from json-body"
+      (ok [(toHash disc1)])))
 )

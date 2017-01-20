@@ -47,7 +47,7 @@
 (defn wrap-formats [handler]
   (let [wrapped (wrap-restful-format
                   handler
-                  {:formats [:json-kw :transit-json :transit-msgpack]})]
+                  {:formats [:json :json-kw :transit-json :transit-msgpack]})]
     (fn [request]
       ;; disable wrap-formats for websockets
       ;; since they're not compatible with this middleware
@@ -57,6 +57,7 @@
   (-> ((:middleware defaults) handler)
       wrap-webjars
       wrap-flash
+      wrap-formats
       (wrap-session {:cookie-attrs {:http-only true}})
       (wrap-defaults
         (-> site-defaults

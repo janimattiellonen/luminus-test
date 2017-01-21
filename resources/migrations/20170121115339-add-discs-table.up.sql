@@ -1,0 +1,27 @@
+CREATE TABLE discs
+(
+  id int(20) unsigned NOT NULL AUTO_INCREMENT,
+  type varchar(30) DEFAULT NULL,
+  manufacturer varchar(30) DEFAULT NULL,
+  color varchar(30) DEFAULT NULL,
+  material varchar(30) DEFAULT NULL,
+  speed tinyint(3) default 0,
+  glide tinyint(3) default 0,
+  stability tinyint(3) default 0,
+  fade tinyint(3) default 0,
+  weight tinyint(3) default 0,
+  name varchar(30) DEFAULT NULL,
+  is_lost bool DEFAULT false,
+  is_lost_description TEXT DEFAULT NULL,
+  lost_date DATETIME DEFAULT NULL,
+  is_collection_item bool DEFAULT false,
+  is_sold bool DEFAULT false,
+  is_broken bool DEFAULT false,
+  hole_in_one bool DEFAULT false,
+  hole_in_one_date DATETIME DEFAULT NULL,
+  image varchar(255) DEFAULT NULL,
+  additional TEXT DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);

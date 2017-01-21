@@ -3,7 +3,9 @@
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
             [guestbook2.db.core :as db]
-            [guestbook2.services.disc :as disc]))
+            [guestbook2.services.disc :as disc]
+            [clj-http.client :as client]
+            [cheshire.core :as cheshire]))
 
 (defn insert-numbers [params]
   (do
@@ -12,12 +14,38 @@
     (ok 1)
   )
 
+(defn import-disc-data
+  [url]
+
+  (def jsonData (client/get url {:as :json}))
+
+  ;(def discs2 (cheshire/parse-string (client/get url {:as :json})))
+
+  ;(def discsParsed (cheshire/parse-string discs true))
+
+  (def discs (cheshire/parse-string (str jsonData)))
+
+
+
+  (str jsonData)
+)
+
+(defn insert-disc-data
+  [data]
+
+  )
+
 (defrecord Disc [id type manufacturer])
 (def disc1 (Disc. 10 "putter" "Innova"))
 
 (defn toHash
   [defRecord]
     (hash-map :id (:id defRecord) :type (:type defRecord) :manufacturer (:manufacturer defRecord))
+  )
+
+(defn return-response
+  [response]
+  (ok [{:data response}])
   )
 
 (defapi service-routes
@@ -77,6 +105,12 @@
       (insert-numbers {:val1 val1 :val2 val2}))
 
     (GET "/discs" []
-      :summary  "echoes a Thingie from json-body"
-      (ok [(toHash disc1)])))
+      :summary  "Returns a list of available discs"
+      (ok [(toHash disc1)]))
+
+    (GET "/import" []
+      :summary "Imports disc data from restdb"
+      (ok [{:ok (import-disc-data "http://discs.janimattiellonen.fi/api/discs")}]))
+
+  )
 )

@@ -26,3 +26,54 @@ WHERE id = :id
 INSERT INTO numbers
 (val1, val2)
 VALUES (:val1, :val2)
+
+
+
+-- :name insert-discs :! :n
+-- :doc inserts a row to discs TABLE
+INSERT INTO discs
+(
+  type,
+  manufacturer,
+  color,
+  material,
+  speed,
+  glide,
+  stability,
+  fade,
+  weight,
+  name,
+  is_lost,
+  is_lost_description,
+  lost_date,
+  is_collection_item,
+  is_sold,
+  is_broken,
+  hole_in_one,
+  hole_in_one_date,
+  image,
+  additional
+)
+VALUES
+(
+  :type,
+  :manufacturer,
+  :color,
+  :material,
+  :speed,
+  :glide,
+  :stability,
+  :fade,
+  :weight,
+  :name,
+  :is_lost,
+  :is_lost_description,
+  :lost_date,
+  :is_collection_item,
+  :is_sold,
+  :is_broken,
+  :hole_in_one,
+  :hole_in_one_date,
+  :image,
+  :additional
+)

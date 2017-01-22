@@ -17,22 +17,35 @@
 (defn import-disc-data
   [url]
 
-  (def jsonData (client/get url {:as :json}))
+  (def discData (client/get url))
+  (def jsonData (client/get url {:as :json-strict-string-keys}))
 
   ;(def discs2 (cheshire/parse-string (client/get url {:as :json})))
 
   ;(def discsParsed (cheshire/parse-string discs true))
 
-  (def discs (cheshire/parse-string (str jsonData)))
+  ;(def discs (cheshire/parse-string (str jsonData)))
+
+
+  ;(str jsonData)
 
 
 
-  (str jsonData)
+  (def data(get discData :body))
+
+
+
+  ;(str jsonData)
+
+  (def discsParsed (cheshire/parse-string data true))
+  (str (type(get discsParsed :data)))
+
+  ;(.count discsParsed)
+  ;(get (first-element discsParsed) :_id)
 )
 
 (defn insert-disc-data
   [data]
-
   )
 
 (defrecord Disc [id type manufacturer])

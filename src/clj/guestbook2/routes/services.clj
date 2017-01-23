@@ -6,11 +6,21 @@
             [guestbook2.services.disc :as disc]
             [clj-http.client :as client]
             [cheshire.core :as cheshire]))
+  (use 'clojure.walk)
 
 (defn insert-numbers [params]
   (do
     (db/insert-numbers!
       params))
+    (ok 1)
+  )
+
+(defn insert-disc
+  [disc]
+
+  (do
+    (db/insert-disc!
+      [disc]))
     (ok 1)
   )
 
@@ -20,33 +30,20 @@
   (def discData (client/get url))
   (def jsonData (client/get url {:as :json-strict-string-keys}))
 
-  ;(def discs2 (cheshire/parse-string (client/get url {:as :json})))
-
-  ;(def discsParsed (cheshire/parse-string discs true))
-
-  ;(def discs (cheshire/parse-string (str jsonData)))
-
-
-  ;(str jsonData)
-
-
-
   (def data(get discData :body))
 
 
 
-  ;(str jsonData)
 
   (def discsParsed (cheshire/parse-string data true))
-  (str (type(get discsParsed :data)))
 
-  ;(.count discsParsed)
-  ;(get (first-element discsParsed) :_id)
+  (def data (get discsParsed :data))
+
+  (map
+    #(insert-disc (vec %))
+    (map
+      #(postwalk-replace % data) [{:missing :lost}]))
 )
-
-(defn insert-disc-data
-  [data]
-  )
 
 (defrecord Disc [id type manufacturer])
 (def disc1 (Disc. 10 "putter" "Innova"))

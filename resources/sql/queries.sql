@@ -29,7 +29,7 @@ VALUES (:val1, :val2)
 
 
 
--- :name insert-discs :! :n
+-- :name insert-disc! :! :n
 -- :doc inserts a row to discs TABLE
 INSERT INTO discs
 (

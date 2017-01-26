@@ -59,12 +59,21 @@
   (map insert-disc-data discData)
 )
 
+(defn add-missing-key
+  [coll missing-key]
+  )
+
 (defn insert-disc-data
-  [params]
+  [data]
+
+  (if (not (contains? data :is_lost_description))
+    (conj data {:is_lost_description ""})
+    data
+  )
 
   (do
     (db/insert-disc!
-      params))
+      data))
     (ok 1)
   )
 

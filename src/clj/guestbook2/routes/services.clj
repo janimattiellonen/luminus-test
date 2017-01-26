@@ -6,21 +6,13 @@
             [guestbook2.services.disc :as disc]
             [clj-http.client :as client]
             [cheshire.core :as cheshire]))
-  (use 'clojure.walk)
+
+(use 'clojure.walk)
 
 (defn insert-numbers [params]
   (do
     (db/insert-numbers!
       params))
-    (ok 1)
-  )
-
-(defn insert-disc
-  [disc]
-
-  (do
-    (db/insert-disc!
-      [disc]))
     (ok 1)
   )
 
@@ -30,20 +22,51 @@
   (def discData (client/get url))
   (def jsonData (client/get url {:as :json-strict-string-keys}))
 
+  ;(def discs2 (cheshire/parse-string (client/get url {:as :json})))
+
+  ;(def discsParsed (cheshire/parse-string discs true))
+
+  ;(def discs (cheshire/parse-string (str jsonData)))
+
+
+  ;(str jsonData)
+
+
+
   (def data(get discData :body))
 
 
 
+  ;(str jsonData)
 
   (def discsParsed (cheshire/parse-string data true))
 
-  (def data (get discsParsed :data))
 
-  (map
-    #(insert-disc (vec %))
+  (def foo(map
+    #(vec %)
     (map
-      #(postwalk-replace % data) [{:missing :lost}]))
+      #(postwalk-replace % discsParsed) [{:missing :lost}])))
+
+  (def foo2 (map
+    #(postwalk-replace % discsParsed)
+    [{:missing :is_lost, :missing_description :is_lost_description}]))
+
+  (def discData (get (first foo2) :data))
+
+  ;(map #(println %) foo)
+  discData
+
+  (map insert-disc-data discData)
 )
+
+(defn insert-disc-data
+  [params]
+
+  (do
+    (db/insert-disc!
+      params))
+    (ok 1)
+  )
 
 (defrecord Disc [id type manufacturer])
 (def disc1 (Disc. 10 "putter" "Innova"))
